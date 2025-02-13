@@ -1,5 +1,6 @@
 import Image from "next/image";
-import GetAllUsers from '@/app/component/users/GetAllUsers'
+import GetAllUsers from "@/app/component/users/GetAllUsers";
+import LogoutButtom from "@/app/component/users/LogoutButtom";
 interface User {
   name: string;
   email: string;
@@ -13,14 +14,18 @@ export default async function UsersPage({
 }) {
   const { id } = await params; // Get ID from URL
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/userdata/${id}`, {
-    cache: "no-store", // Prevent caching for fresh data
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/userdata/${id}`,
+    {
+      cache: "no-store", // Prevent caching for fresh data
+    }
+  );
   if (!res.ok) {
     throw new Error("User not found");
   }
   const data = await res.json();
-  const user:User = data.user;
+  const user: User = data.user;
+
   return (
     <div className="h-screen flex flex-col gap-4 items-center mt-10">
       <div>
@@ -35,10 +40,13 @@ export default async function UsersPage({
       <div className=" flex items-center flex-col">
         <span className="-mt-3  italic">{user?.name}</span>
         <br />
-        <span className=" -mt-5 italic">{user?.email}</span>
+        <span className=" -mt-1 italic">{user?.email}</span>
       </div>
       <div className="mt-3">
-        <h1 className=" w-full bg-gray-300  font-bold">User Lists</h1>
+        <div className="w-full bg-gray-300 flex justify-between">
+          <h1 className="  font-bold">User Lists</h1>
+          <LogoutButtom />
+        </div>
         <GetAllUsers />
       </div>
     </div>
