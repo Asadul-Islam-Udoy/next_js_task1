@@ -1,35 +1,20 @@
-"use client";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import Image from "next/image";
 interface User {
-  _id: string;
   name: string;
   email: string;
-  image: string;
 }
-interface UsersPageProps {
-  users: User[];
-}
-export default async function GetAllUsers() {
-  const [usersInfo, setUsersInfo] = useState< UsersPageProps| []>([]);
-  const [lodding, setLodding] = useState<boolean>(false);
-  useEffect(() => {
-    const fetchUser = async () => {
-        try {
-          const res = await axios.get('/api/users/userdata/');
-          if (!res) {
-            throw new Error("User not found");
-          }
-          setUsersInfo(res.data.users);
-          setLodding(false);
-        } catch (error) {
-          console.error("Error fetching user:", error);
-          setLodding(false);
-        }
-      }
-    fetchUser();
-  }, []);
-
+async function GetAllUsers() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/userdata/`,
+    {
+      cache: "no-store", // Prevent caching for fresh data
+    }
+  );
+  if (!res.ok) {
+    throw new Error("User not found");
+  }
+  const data = await res.json();
+  const users: User[] = data.users;
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -48,15 +33,26 @@ export default async function GetAllUsers() {
         </thead>
         <tbody>
           <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Apple MacBook Pro 17"
-            </th>
-            <td className="px-6 py-4">Silver</td>
-            <td className="px-6 py-4">Laptop</td>
-
+            {users?.map((item, index) => (
+              <>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {item.name}
+                </th>
+                <td className="px-6 py-4">{item.email}</td>
+                <td className="px-6 py-4">
+                  <Image
+                    src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+                    alt="User Profile"
+                    className="h-10 w-10 border rounded-full"
+                    width={40} // Define width
+                    height={40} // Define height
+                  />
+                </td>
+              </>
+            ))}
           </tr>
         </tbody>
       </table>
@@ -64,5 +60,4 @@ export default async function GetAllUsers() {
   );
 }
 
-
-
+export default GetAllUsers;

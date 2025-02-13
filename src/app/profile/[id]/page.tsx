@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import GetAllUsers from '@/app/component/users/GetAllUsers'
 interface User {
   name: string;
   email: string;
@@ -32,14 +32,14 @@ export default async function UsersPage({
           height={96} // Define height
         />
       </div>
-      <div>
-        <span className="m-4 italic">User Name: {user?.name}</span>
+      <div className=" flex items-center flex-col">
+        <span className="-mt-3  italic">{user?.name}</span>
         <br />
-        <span className="m-4 italic">User Email: {user?.email}</span>
+        <span className=" -mt-5 italic">{user?.email}</span>
       </div>
-      <div className="mt-10">
-        <h1 className=" font-bold">User Lists</h1>
-        {/* <GetAllUsers /> */}
+      <div className="mt-3">
+        <h1 className=" w-full bg-gray-300  font-bold">User Lists</h1>
+        <GetAllUsers />
       </div>
     </div>
   );
