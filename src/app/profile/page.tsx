@@ -1,34 +1,34 @@
+"use client"
 import Image from "next/image";
-import GetAllUsers from "@/app/component/users/GetAllUsers";
 import LogoutButtom from "@/app/component/users/LogoutButtom";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import GetAllUsers from "../component/users/GetAllUsers";
 interface User {
   name: string;
   email: string;
 }
 
 // React component to display users
-export default async function UsersPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = await params; // Get ID from URL
+export default function UserProfilePage() {
+  const [user,setUser] = useState<User>({
+    name:'',
+    email:''
+  });
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/userdata/${id}`,
-    {
-      cache: "no-store", // Prevent caching for fresh data
+  useEffect(()=>{
+    function ProfileHandler() {
+      fetch("/api/users/jwtverify/")
+        .then((response) => response.json())
+        .then((data) => {
+          setUser(data.user);
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error || "An error occurred");
+        });
     }
-  );
-  if (!res.ok) {
-    throw new Error("User not found");
-  }
-  if (!res.ok) {
-    console.log("res", res);
-  }
-  const data = await res.json();
-  const user: User = data.user;
-
+    ProfileHandler();
+  },[]);
   return (
     <div className="h-screen flex flex-col gap-4 items-center mt-10">
       <div>
@@ -47,8 +47,8 @@ export default async function UsersPage({
       </div>
       <div className="mt-3">
         <div className="w-full bg-gray-300 flex justify-between">
-          <h1 className="  font-bold ml-2">User Lists</h1>
-          <LogoutButtom />
+          <h1 className="font-bold ml-2">User Lists</h1>
+          <LogoutButtom /> 
         </div>
         <GetAllUsers />
       </div>

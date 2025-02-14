@@ -23,5 +23,5 @@ export function middleware(request:NextRequest) {
 
 // Apply middleware to protect specific routes
 export const config = {
-    matcher: ['/signin','/profile/:id','/signup'], // Add protected pages or API routes
+    matcher: ['/profile'], // Add protected pages or API routes
 };

@@ -1,11 +1,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
-// Define the expected structure of the JWT payload
-interface DecodedToken extends JwtPayload {
-    id: string;
-}
 export function GetTokenValidate(request:NextRequest) {
     try{
     const token = request.cookies.get('token')?.value || '';
@@ -15,7 +11,7 @@ export function GetTokenValidate(request:NextRequest) {
         error:'token is not define!'
     },{status:400})
     }
-    const decoded =  jwt.verify(token,process.env.JWT_SECRET!) as DecodedToken;;
+    const decoded:any =  jwt.verify(token,process.env.JWT_SECRET!);
     return decoded?.id
 }
     catch (error:any) {

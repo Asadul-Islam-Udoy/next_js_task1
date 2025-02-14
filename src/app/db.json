@@ -1,0 +1,10 @@
+[
+  {
+    "eventType": "user.signup",
+    "data": {
+      "id": "123",
+      "name": "Alice sdf",
+      "email": "alice@example.com"
+    }
+  }
+]

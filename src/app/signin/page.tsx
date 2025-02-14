@@ -21,7 +21,7 @@ function SingInPage() {
       const response = await axios.post("/api/users/signin", user);
       if (response) {
         toast.success("login successfully");
-        router.push(`/profile/${response?.data?.user?._id}`);
+        router.push('/profile');
       }
     } catch (error: any) {
       setDisabled(false);
